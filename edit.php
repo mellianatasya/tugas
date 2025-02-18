@@ -2,16 +2,16 @@
 include 'header.php';
 include 'koneksi.php';
 
-// Ambil ID siswa dari parameter URL
-if (!isset($_GET['id']) || empty($_GET['id'])) {
-    echo "<script>alert('ID siswa tidak ditemukan!'); window.location='index.php';</script>";
+// Ambil NIS siswa dari parameter URL
+if (!isset($_GET['nis']) || empty($_GET['nis'])) {
+    echo "<script>alert('NIS siswa tidak ditemukan!'); window.location='index.php';</script>";
     exit;
 }
 
-$id_siswa = $_GET['id'];
+$nis = $_GET['nis'];
 
-// Ambil data siswa berdasarkan ID
-$query = "SELECT * FROM siswa WHERE id_siswa = '$id_siswa'";
+// Ambil data siswa berdasarkan NIS
+$query = "SELECT * FROM siswa WHERE nis = '$nis'";
 $result = mysqli_query($koneksi, $query);
 $siswa = mysqli_fetch_assoc($result);
 
@@ -22,24 +22,22 @@ if (!$siswa) {
 
 // Proses update jika tombol simpan ditekan
 if (isset($_POST['submit'])) {
-    $nis = $_POST['nis'];
     $nama_siswa = $_POST['nama_siswa'];
     $tempat_lahir = $_POST['tempat_lahir'];
     $tanggal_lahir = $_POST['tanggal_lahir'];
     $id_kelas = $_POST['id_kelas']; // ID kelas dari dropdown
-    $wali_murid = $_POST['id_wali']; // Diketik langsung
+    $id_wali = $_POST['id_wali']; // ID wali dari dropdown
     $jenis_kelamin = $_POST['jenis_kelamin'];
 
-    // Query update
+    // Query update berdasarkan NIS
     $update_query = "UPDATE siswa SET 
-                        nis = '$nis', 
                         nama_siswa = '$nama_siswa', 
                         tempat_lahir = '$tempat_lahir', 
                         tanggal_lahir = '$tanggal_lahir', 
                         id_kelas = '$id_kelas', 
-                        wali_murid = '$wali_murid', 
+                        id_wali = '$id_wali', 
                         jenis_kelamin = '$jenis_kelamin'
-                    WHERE id_siswa = '$id_siswa'";
+                    WHERE nis = '$nis'";
 
     if (mysqli_query($koneksi, $update_query)) {
         echo "<script>alert('Data berhasil diperbarui!'); window.location='index.php';</script>";
@@ -52,10 +50,10 @@ if (isset($_POST['submit'])) {
 <div class="container mt-5 d-flex justify-content-center">
     <div class="card shadow-lg p-4" style="width: 50rem; border-radius: 12px;">
         <h2 class="text-center mb-4 text-primary">Edit Data Siswa</h2>
-        <form action="edit.php?id=<?= $id_siswa ?>" method="POST">
+        <form action="edit.php?nis=<?= $nis ?>" method="POST">
             <div class="mb-3">
                 <label for="nis" class="form-label fw-bold">NIS</label>
-                <input type="text" class="form-control shadow-sm" id="nis" name="nis" value="<?= $siswa['nis'] ?>" required>
+                <input type="text" class="form-control shadow-sm" id="nis" name="nis" value="<?= $siswa['nis'] ?>" readonly>
             </div>
             <div class="mb-3">
                 <label for="nama_siswa" class="form-label fw-bold">Nama Siswa</label>
@@ -84,8 +82,18 @@ if (isset($_POST['submit'])) {
                 </select>
             </div>
             <div class="mb-3">
-                <label for="wali_murid" class="form-label fw-bold">Wali Murid</label>
-                <input type="text" class="form-control shadow-sm" id="id_wali" name="id_wali" value="<?= $siswa['id_wali'] ?>" required>
+                <label for="id_wali" class="form-label fw-bold">Wali Murid</label>
+                <select class="form-control shadow-sm" id="id_wali" name="id_wali" required>
+                    <option value="">Pilih Wali Murid</option>
+                    <?php
+                    $wali_query = "SELECT * FROM wali_murid";
+                    $wali_result = mysqli_query($koneksi, $wali_query);
+                    while ($wali = mysqli_fetch_assoc($wali_result)) {
+                        $selected = ($wali['id_wali'] == $siswa['id_wali']) ? 'selected' : '';
+                        echo "<option value='".$wali['id_wali']."' $selected>".$wali['nama_wali']."</option>";
+                    }
+                    ?>
+                </select>
             </div>
             <div class="mb-3">
                 <label class="form-label fw-bold">Jenis Kelamin</label>

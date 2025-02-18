@@ -1,6 +1,7 @@
 <?php include 'header.php'; ?>
 <?php include 'koneksi.php'; ?>
 
+
 <style>
     .kelas-container {
         max-width: 600px;
@@ -35,9 +36,10 @@
     }
 </style>
 
+
 <div class="container mt-5 kelas-container">
     <h2 class="text-center kelas-header">➕ Tambah Kelas</h2>
-    
+   
     <form action="" method="POST">
         <div class="mb-3">
             <label for="nama_kelas" class="form-label">Nama Kelas</label>
@@ -50,9 +52,11 @@
     </form>
 </div>
 
+
 <?php
 if (isset($_POST['simpan'])) {
     $nama_kelas = $_POST['nama_kelas'];
+
 
     // Pastikan koneksi sudah benar, menggunakan mysqli_query
     $query = "INSERT INTO kelas (nama_kelas) VALUES ('$nama_kelas')";
@@ -66,5 +70,3 @@ if (isset($_POST['simpan'])) {
     }
 }
 ?>
-
-

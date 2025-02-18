@@ -20,7 +20,6 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link" href="index.php">Data Siswa</a></li>
-                <li class="nav-item"><a class="nav-link" href="profil.php">Profil Sekolah</a></li>
             </ul>
         </div>
     </div>
